@@ -3,6 +3,5 @@ define([ /*Add dependencies, in quotes, to the array*/
         ], function(){  
 		
     /* You can modify this file. However, do not rename it. */
-	const plot = new Plot();
-	plot.replot();
+	const plot = new Plot();	
 })
