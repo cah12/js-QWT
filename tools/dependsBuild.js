@@ -23,13 +23,13 @@ Running the command node dependsBuild.js, generates the app.js file in the www f
 In the tools folder there is a dependsBuild.bat file. This file is run by notepad++ with the alt b short cut.
  */
 (function () {
-    var append = false;
+    let append = false;
     const fs = require('fs');
     const Path = require('path');
     const sep = Path.sep;
     const appJsFilePath = '..' + sep + 'www' + sep + 'app.js';
 
-    var ids = [];
+    let ids = [];
     function processFile(path) {
         const text = fs.readFileSync(path, 'utf8');
         text.split(/\r?\n/).forEach(function (line) {
@@ -81,8 +81,10 @@ In the tools folder there is a dependsBuild.bat file. This file is run by notepa
     function writeWarning() {
         fs.writeFileSync(appJsFilePath, "/*This file was generated through the dependencies build proess. Do not modify or delete this file. If the file is accidentally modified or you suspect it is somehow corrupted, run build. It is always a good idea to run build before embarking on heavy troubleshooting.*/", function () { });
     }
-    var paths = "app: '../app', underscore: 'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min'";
-    var shims = "{'static':{ deps:['miscObjects'] }, 'file':{ deps:['xlsx', 'upload'] }, 'utility':{ deps:['evaluateExp'] }, 'plot':{ deps:['static','widget','scaleWidget','utility', 'enumerator', 'miscObjects','painter','scaleDiv','interval','scaleMap','scaleWidget','transform','layout','scaleDraw','scaleEngine','pointMapper'] }, 'plotItem':{ deps:['static', 'enumerator'] }, 'scaleMap':{ deps:['static','transform'] }, 'canvas':{ deps:['static'] }, 'curveFitter':{ deps:['static'] }, 'spline':{ deps:['static'] }, 'symbol':{ deps:['static','graphic'] }, 'seriesData':{ deps:['static','plotItem'] }, 'pointMapper':{ deps:['static'] }, 'pointData':{ deps:['static','seriesData'] }, 'scaleEngine':{ deps:['static'] }, 'scaleDraw':{ deps:['static','abstractScaleDraw'] }, 'widget':{ deps:['static','hObject'] }, 'widgetOverlay':{ deps:['static','widget'] }, 'scaleWidget':{ deps:['static','widget'] }, 'picker':{ deps:['static','widgetOverlay','pickermachine'] }, 'plotpicker':{ deps:['static','picker'] }, 'plotzoomer':{ deps:['plotpicker'] }, 'plotGrid':{ deps:['static','plotItem'] }, 'plotZoneItem':{ deps:['static'] }, 'plotSpectrogram':{ deps:['static',  'conrec', 'plotRasterItem'] }, 'plotRasterItem':{ deps:['static', 'plotItem'] }, 'plotSpectroCurve':{ deps:['static','colorMap','plotItem','seriesData'] }, 'colorMap':{ deps:['static'] }, 'plotcurve':{ deps:['static','seriesData'] }, 'panner':{ deps:['static','hObject'] }, 'magnifier':{ deps:['static','hObject'] }, 'plotShapeItem':{ deps:['static','plotItem'] }, 'plotMarker':{ deps:['static','plotItem'] }, 'legend':{ deps:['static'] }, 'pickermachine':{ deps:['static','eventpattern'] }, 'widget':{ deps:['static','hObject'] }";
+    let initPaths = "app: '../app', underscore: 'https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min'";
+    let paths = initPaths;
+    let initShims = "{'static':{ deps:['miscObjects'] }, 'file':{ deps:['xlsx', 'upload'] }, 'utility':{ deps:['evaluateExp'] }, 'plot':{ deps:['static','widget','scaleWidget','utility', 'enumerator', 'miscObjects','painter','scaleDiv','interval','scaleMap','scaleWidget','transform','layout','scaleDraw','scaleEngine','pointMapper'] }, 'plotItem':{ deps:['static', 'enumerator'] }, 'scaleMap':{ deps:['static','transform'] }, 'canvas':{ deps:['static'] }, 'curveFitter':{ deps:['static'] }, 'spline':{ deps:['static'] }, 'symbol':{ deps:['static','graphic'] }, 'seriesData':{ deps:['static','plotItem'] }, 'pointMapper':{ deps:['static'] }, 'pointData':{ deps:['static','seriesData'] }, 'scaleEngine':{ deps:['static'] }, 'scaleDraw':{ deps:['static','abstractScaleDraw'] }, 'widget':{ deps:['static','hObject'] }, 'widgetOverlay':{ deps:['static','widget'] }, 'scaleWidget':{ deps:['static','widget'] }, 'picker':{ deps:['static','widgetOverlay','pickermachine'] }, 'plotpicker':{ deps:['static','picker'] }, 'plotzoomer':{ deps:['plotpicker'] }, 'plotGrid':{ deps:['static','plotItem'] }, 'plotZoneItem':{ deps:['static'] }, 'plotSpectrogram':{ deps:['static',  'conrec', 'plotRasterItem'] }, 'plotRasterItem':{ deps:['static', 'plotItem'] }, 'plotSpectroCurve':{ deps:['static','colorMap','plotItem','seriesData'] }, 'colorMap':{ deps:['static'] }, 'plotcurve':{ deps:['static','seriesData'] }, 'panner':{ deps:['static','hObject'] }, 'magnifier':{ deps:['static','hObject'] }, 'plotShapeItem':{ deps:['static','plotItem'] }, 'plotMarker':{ deps:['static','plotItem'] }, 'legend':{ deps:['static'] }, 'pickermachine':{ deps:['static','eventpattern'] }, 'widget':{ deps:['static','hObject'] }"; 
+    let shims = initShims;
     function writeRequireJsDotConfig() {
         fs.writeFileSync(appJsFilePath, "\nrequirejs.config ({baseUrl: 'lib', paths: {" + paths + "}, shim:" + shims + "}});", {
             'flag': 'a'
@@ -104,8 +106,8 @@ In the tools folder there is a dependsBuild.bat file. This file is run by notepa
         src = src.replace('../www/app/src/', '').replace('.js', '');
         console.log(src);
         src = '../app/src/' + src;
-        var res = src.split("/");
-        var _srcId = res[res.length - 1];
+        let res = src.split("/");
+        let _srcId = res[res.length - 1];
         if (ids.indexOf(_srcId) !== -1) {
             throw "Unique source Id required";
         }
@@ -116,20 +118,24 @@ In the tools folder there is a dependsBuild.bat file. This file is run by notepa
         };
     }
     console.log("Scanning files and folders...");
+    paths = initPaths;
+    shims = initShims;
+
     buildTree('..' + sep + 'www' + sep + 'app' + sep + 'src');
     fs.readFile('config.txt', 'utf8', function (err, data) {
         if (data !== '') {
             if (err)
                 throw err;
-            var dataArr = data.split('#');
-            for (var i = 0; i < dataArr.length; ++i) {
-                var depsAndPaths = dataArr[i].replace('],', ']#').split('#');
-                var srcIdAndPaths = getSrcIdAndPaths(depsAndPaths[1]);
+            let dataArr = data.split('#');
+            for (let i = 0; i < dataArr.length; ++i) {
+                let depsAndPaths = dataArr[i].replace('],', ']#').split('#');
+                let srcIdAndPaths = getSrcIdAndPaths(depsAndPaths[1]);
                 shims = shims + "," + srcIdAndPaths.srcId + ": {deps: " + depsAndPaths[0] + "}";
                 paths = paths + "," + srcIdAndPaths.srcId + ":'" + srcIdAndPaths.path + "'";
             }
             writeAppJsFile();
         } else {
+            writeAppJsFile();
             console.log("   Did not find any dependency to build.");
         }
         fs.unlink('config.txt', (err) => {
