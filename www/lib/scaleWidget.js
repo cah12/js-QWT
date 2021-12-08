@@ -310,7 +310,7 @@ class ScaleWidget extends Widget {
 			if (m_title !== "") {
 				painter.drawVerticalText(m_title, canvasWidth - m_titleFont.th, canvasHeight / 2, true);
 			}
-		} else if (m_scaleDraw.alignment() === Static.BottomScale) {
+		} else if (m_scaleDraw.alignment() === ScaleDraw.Alignment.BottomScale) {
 			if (m_title !== "") {
 				painter.drawText(m_title, canvasWidth / 2, canvasHeight - 2, "center");
 			}
