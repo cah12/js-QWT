@@ -1,4 +1,4 @@
-"#include ['plot']";
+"include ['plot']";
 
 class MyPlot extends Plot{
     constructor(title){

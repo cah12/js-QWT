@@ -116,7 +116,7 @@ In the tools folder there is a dependsBuild.bat file. This file is run by notepa
         };
     }
     console.log("Scanning files and folders...");
-    buildTree('..' + sep + 'www' + sep + 'app' + sep + 'src')
+    buildTree('..' + sep + 'www' + sep + 'app' + sep + 'src');
     fs.readFile('config.txt', 'utf8', function (err, data) {
         if (data !== '') {
             if (err)
@@ -132,5 +132,10 @@ In the tools folder there is a dependsBuild.bat file. This file is run by notepa
         } else {
             console.log("   Did not find any dependency to build.");
         }
+        fs.unlink('config.txt', (err) => {
+            if (err) throw err;
+            console.log('config.txt was deleted');
+        });
     });
+
 })()
